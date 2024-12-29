@@ -1,0 +1,151 @@
+.article-detail {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+
+  .loading-container,
+  .error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    text-align: center;
+  }
+
+  .error-message {
+    color: #f44336;
+    margin-bottom: 1rem;
+  }
+
+  article {
+    header {
+      margin-bottom: 2rem;
+      
+      .article-meta {
+        display: flex;
+        gap: 1rem;
+        color: rgba(0, 0, 0, 0.6);
+        margin-bottom: 1rem;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        line-height: 1.2;
+        margin: 0 0 1rem;
+      }
+
+      mat-chip-set {
+        margin-bottom: 1rem;
+      }
+
+      .admin-actions {
+        margin-top: 1rem;
+        display: flex;
+        gap: 1rem;
+      }
+    }
+
+    .summary {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: rgba(0, 0, 0, 0.8);
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background-color: rgba(0, 0, 0, 0.05);
+      border-radius: 4px;
+    }
+
+    .content {
+      font-size: 1.1rem;
+      line-height: 1.7;
+
+      ::ng-deep {
+        // Headers
+        h1, h2, h3, h4, h5, h6 {
+          margin-top: 2rem;
+          margin-bottom: 1rem;
+          font-weight: 500;
+        }
+
+        // Links
+        a {
+          color: #3f51b5;
+          text-decoration: none;
+          
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+
+        // Code blocks
+        pre {
+          background-color: rgba(0, 0, 0, 0.05);
+          padding: 1rem;
+          border-radius: 4px;
+          overflow-x: auto;
+        }
+
+        // Inline code
+        code {
+          background-color: rgba(0, 0, 0, 0.05);
+          padding: 0.2rem 0.4rem;
+          border-radius: 4px;
+        }
+
+        // Images
+        img {
+          max-width: 100%;
+          height: auto;
+          margin: 1rem 0;
+        }
+
+        // Lists
+        ul, ol {
+          margin: 1rem 0;
+          padding-left: 2rem;
+        }
+
+        // Blockquotes
+        blockquote {
+          margin: 1rem 0;
+          padding-left: 1rem;
+          border-left: 4px solid #3f51b5;
+          color: rgba(0, 0, 0, 0.6);
+        }
+      }
+    }
+  }
+
+  .back-button {
+    margin-top: 2rem;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 600px) {
+  .article-detail {
+    padding: 1rem;
+
+    article {
+      header {
+        h1 {
+          font-size: 2rem;
+        }
+
+        .article-meta {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+      }
+
+      .summary {
+        font-size: 1.1rem;
+      }
+
+      .content {
+        font-size: 1rem;
+      }
+    }
+  }
+}

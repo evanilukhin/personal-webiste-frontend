@@ -1,0 +1,31 @@
+<mat-toolbar color="primary">
+  <a mat-button routerLink="/">
+    <span class="site-title">My Blog</span>
+  </a>
+  <span class="spacer"></span>
+  
+  <!-- Navigation Links -->
+  <nav>
+    <a mat-button routerLink="/articles" routerLinkActive="active">Articles</a>
+    
+    <!-- Admin Links -->
+    <ng-container *ngIf="(currentUser$ | async)?.is_admin">
+      <a mat-button routerLink="/articles/new" routerLinkActive="active">
+        <mat-icon>add</mat-icon>
+        New Article
+      </a>
+    </ng-container>
+    
+    <!-- Auth Links -->
+    <ng-container *ngIf="!(currentUser$ | async)">
+      <a mat-button routerLink="/login" routerLinkActive="active">Login</a>
+    </ng-container>
+    
+    <ng-container *ngIf="currentUser$ | async">
+      <button mat-button (click)="onLogout()">
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
+    </ng-container>
+  </nav>
+</mat-toolbar>

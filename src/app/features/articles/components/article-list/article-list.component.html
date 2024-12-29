@@ -1,0 +1,67 @@
+<div class="article-list">
+  <div class="header">
+    <h1>Articles</h1>
+    <a mat-raised-button color="primary" routerLink="/articles/new" *ngIf="isAdmin$ | async">
+      <mat-icon>add</mat-icon>
+      New Article
+    </a>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error">
+    <p class="error-message">{{ error }}</p>
+    <button mat-button color="primary" (click)="loadArticles()">Try Again</button>
+  </div>
+
+  <!-- Articles List -->
+  <div class="articles-grid" *ngIf="!loading && !error">
+    <mat-card *ngFor="let article of articles" class="article-card">
+      <mat-card-header>
+        <mat-card-title>
+          <a [routerLink]="['/articles', article.id]">{{ article.title }}</a>
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{ article.created_at | date:'mediumDate' }}
+          <span *ngIf="article.reading_time"> • {{ article.reading_time }} min read</span>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <img *ngIf="article.cover_image" 
+           [src]="article.cover_image" 
+           [alt]="article.title"
+           class="article-image">
+
+      <mat-card-content>
+        <p class="summary">{{ article.summary }}</p>
+        <div class="tags" *ngIf="article.tags && article.tags.length > 0">
+          <ng-container *ngFor="let tag of article.tags">
+            <span class="tag" *ngIf="tag && tag.name">
+              {{ tag.name }}
+            </span>
+          </ng-container>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions align="end" *ngIf="isAdmin$ | async">
+        <a mat-button color="primary" [routerLink]="['/articles', article.id, 'edit']">
+          <mat-icon>edit</mat-icon>
+          Edit
+        </a>
+        <button mat-button color="warn" (click)="deleteArticle(article.id)">
+          <mat-icon>delete</mat-icon>
+          Delete
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!loading && !error && articles.length === 0">
+    <p>No articles found</p>
+  </div>
+</div>

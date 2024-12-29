@@ -1,0 +1,120 @@
+<div class="article-editor">
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error">
+    <p class="error-message">{{ error }}</p>
+    <button mat-button color="primary" routerLink="/articles">Back to Articles</button>
+  </div>
+
+  <!-- Editor Form -->
+  <form [formGroup]="articleForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+    <div class="form-header">
+      <h1>{{ isEditMode ? 'Edit Article' : 'Create New Article' }}</h1>
+      <div class="actions">
+        <button mat-button type="button" (click)="togglePreview()">
+          <mat-icon>{{ previewMode ? 'edit' : 'preview' }}</mat-icon>
+          {{ previewMode ? 'Edit' : 'Preview' }}
+        </button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="articleForm.invalid || saving">
+          <mat-spinner diameter="20" *ngIf="saving"></mat-spinner>
+          <span *ngIf="!saving">{{ isEditMode ? 'Update' : 'Publish' }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <mat-form-field appearance="outline">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" placeholder="Enter article title" required>
+      <mat-error *ngIf="articleForm.get('title')?.errors?.['required']">
+        Title is required
+      </mat-error>
+      <mat-error *ngIf="articleForm.get('title')?.errors?.['minlength']">
+        Title must be at least 3 characters
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Summary -->
+    <mat-form-field appearance="outline">
+      <mat-label>Summary</mat-label>
+      <textarea matInput formControlName="summary" placeholder="Enter article summary" rows="3" required></textarea>
+      <mat-error *ngIf="articleForm.get('summary')?.errors?.['required']">
+        Summary is required
+      </mat-error>
+      <mat-error *ngIf="articleForm.get('summary')?.errors?.['minlength']">
+        Summary must be at least 10 characters
+      </mat-error>
+      <mat-error *ngIf="articleForm.get('summary')?.errors?.['maxlength']">
+        Summary cannot exceed 200 characters
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Content -->
+    <div class="content-section">
+      <div class="editor" [class.hidden]="previewMode">
+        <mat-form-field appearance="outline">
+          <mat-label>Content (Markdown)</mat-label>
+          <textarea matInput formControlName="content" placeholder="Write your article in markdown" rows="20" required></textarea>
+          <mat-error *ngIf="articleForm.get('content')?.errors?.['required']">
+            Content is required
+          </mat-error>
+          <mat-error *ngIf="articleForm.get('content')?.errors?.['minlength']">
+            Content must be at least 10 characters
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="preview" [class.hidden]="!previewMode">
+        <div class="preview-content">
+          <markdown [data]="articleForm.get('content')?.value || ''"></markdown>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <mat-form-field appearance="outline">
+      <mat-label>Tags</mat-label>
+      <mat-chip-grid #chipGrid>
+        <mat-chip-row *ngFor="let tag of selectedTags" [removable]="true" (removed)="removeTag(tag)">
+          {{ tag.name }}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip-row>
+        <input placeholder="New tag..."
+               [matChipInputFor]="chipGrid"
+               [matAutocomplete]="auto"
+               [formControl]="tagCtrl">
+      </mat-chip-grid>
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addTag($event)" [displayWith]="displayFn">
+        <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
+          {{ tag.name }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <!-- Cover Image -->
+    <mat-form-field appearance="outline">
+      <mat-label>Cover Image URL</mat-label>
+      <input matInput formControlName="cover_image" placeholder="Enter image URL">
+    </mat-form-field>
+
+    <!-- Reading Time -->
+    <mat-form-field appearance="outline">
+      <mat-label>Reading Time (minutes)</mat-label>
+      <input matInput type="number" formControlName="reading_time" placeholder="Estimated reading time">
+    </mat-form-field>
+
+    <!-- Published Toggle -->
+    <mat-slide-toggle formControlName="published" color="primary">
+      Published
+    </mat-slide-toggle>
+
+    <!-- Featured Toggle -->
+    <mat-slide-toggle formControlName="featured" color="primary">
+      Featured Article
+    </mat-slide-toggle>
+  </form>
+</div>
