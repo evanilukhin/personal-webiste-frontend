@@ -272,7 +272,6 @@ export class ArticleEditorComponent implements OnInit {
         console.error('Error loading article:', error);
         this.error = 'Failed to load article';
         this.loading = false;
-        this.router.navigate(['/articles']);
       }
     });
   }

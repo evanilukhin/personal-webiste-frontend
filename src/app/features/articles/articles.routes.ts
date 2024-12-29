@@ -15,7 +15,7 @@ export const ARTICLES_ROUTES: Routes = [
     canActivate: [authGuard]
   },
   {
-    path: ':slug',
+    path: ':id',
     component: ArticleDetailComponent
   },
   {

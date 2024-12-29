@@ -103,40 +103,10 @@ export class ArticleService {
     );
   }
 
-  // Get a single article by slug
-  getArticleBySlug(slug: string): Observable<Article> {
-    return this.http.get<Article>(`${this.apiUrl}/articles/slug/${slug}`).pipe(
-      map(article => ({
-        ...article,
-        created_at: new Date(article.created_at),
-        updated_at: new Date(article.updated_at),
-        published_at: article.published_at ? new Date(article.published_at) : null,
-        tags: article.tags.map(tag => ({
-          id: tag.id,
-          name: tag.name,
-          created_at: new Date(tag.created_at)
-        }))
-      })),
-      retry(1), // Retry once on failure
-      catchError(this.handleError)
-    );
-  }
-
   // Get a single article by ID
   getArticle(id: number): Observable<Article> {
     return this.http.get<Article>(`${this.apiUrl}/articles/${id}`).pipe(
-      map(article => ({
-        ...article,
-        created_at: new Date(article.created_at),
-        updated_at: new Date(article.updated_at),
-        published_at: article.published_at ? new Date(article.published_at) : null,
-        tags: article.tags.map(tag => ({
-          id: tag.id,
-          name: tag.name,
-          created_at: new Date(tag.created_at)
-        }))
-      })),
-      retry(1), // Retry once on failure
+      tap(article => console.log('Fetched article:', article)),
       catchError(this.handleError)
     );
   }

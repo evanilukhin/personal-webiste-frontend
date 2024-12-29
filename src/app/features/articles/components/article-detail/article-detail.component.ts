@@ -36,16 +36,16 @@ import { Article } from '../../../../core/models/article.model';
       <!-- Article Content -->
       <mat-card *ngIf="!loading && article" class="article-card">
         <!-- Cover Image -->
-        <img *ngIf="article.coverImage"
-             [src]="article.coverImage"
+        <img *ngIf="article.cover_image"
+             [src]="article.cover_image"
              [alt]="article.title"
              class="cover-image">
 
         <mat-card-header>
           <mat-card-title>{{ article.title }}</mat-card-title>
           <mat-card-subtitle>
-            {{ article.createdAt | date }}
-            · {{ article.readTime }} min read
+            {{ article.created_at | date }}
+            · {{ article.reading_time }} min read
           </mat-card-subtitle>
         </mat-card-header>
 
@@ -53,20 +53,20 @@ import { Article } from '../../../../core/models/article.model';
           <!-- Tags -->
           <div class="tags-container">
             <mat-chip-listbox>
-              <mat-chip *ngFor="let tag of article.tags">{{ tag }}</mat-chip>
+              <mat-chip *ngFor="let tag of article.tags">{{ tag.name }}</mat-chip>
             </mat-chip-listbox>
           </div>
 
           <!-- Summary -->
-          <p class="summary">{{ article.summary }}</p>
+          <p class="summary" *ngIf="article.summary">{{ article.summary }}</p>
 
           <!-- Content -->
-          <div class="content">
+          <div class="article-content">
             <markdown [data]="article.content"></markdown>
           </div>
         </mat-card-content>
 
-        <!-- Admin Actions -->
+        <!-- Actions -->
         <mat-card-actions *ngIf="isAdmin$ | async">
           <button mat-button color="primary" (click)="editArticle()">
             <mat-icon>edit</mat-icon>
@@ -80,10 +80,11 @@ import { Article } from '../../../../core/models/article.model';
       </mat-card>
 
       <!-- Error State -->
-      <div class="error-state" *ngIf="!loading && !article">
+      <div class="error-message" *ngIf="!loading && !article">
         <p>Article not found</p>
-        <button mat-raised-button color="primary" (click)="goBack()">
-          Go Back
+        <button mat-button color="primary" (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon>
+          Back to Articles
         </button>
       </div>
     </div>
@@ -126,12 +127,12 @@ import { Article } from '../../../../core/models/article.model';
       border-radius: 4px;
     }
 
-    .content {
+    .article-content {
       margin-top: 24px;
       line-height: 1.7;
     }
 
-    .error-state {
+    .error-message {
       text-align: center;
       padding: 40px;
       color: rgba(0, 0, 0, 0.54);
@@ -166,13 +167,13 @@ export class ArticleDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const slug = this.route.snapshot.params['slug'];
-    this.loadArticle(slug);
+    const id = Number(this.route.snapshot.params['id']);
+    this.loadArticle(id);
   }
 
-  loadArticle(slug: string): void {
+  loadArticle(id: number): void {
     this.loading = true;
-    this.articleService.getArticleBySlug(slug).subscribe({
+    this.articleService.getArticle(id).subscribe({
       next: (article) => {
         this.article = article;
         this.loading = false;
