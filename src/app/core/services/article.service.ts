@@ -159,7 +159,7 @@ export class ArticleService {
 
   // Get all tags
   getTags(): Observable<Tag[]> {
-    return this.http.get<Tag[]>(`${environment.apiUrl}/api/tags`).pipe(
+    return this.http.get<Tag[]>(`${environment.apiUrl}/tags`).pipe(
       retry(1), // Retry once on failure
       catchError(this.handleError)
     );
@@ -167,7 +167,7 @@ export class ArticleService {
 
   // Create a new tag
   createTag(name: string): Observable<Tag> {
-    return this.http.post<Tag>(`${environment.apiUrl}/api/tags`, { name }).pipe(
+    return this.http.post<Tag>(`${environment.apiUrl}/tags`, { name }).pipe(
       retry(1), // Retry once on failure
       catchError(this.handleError)
     );

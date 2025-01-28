@@ -35,16 +35,7 @@ export class TagService {
   createTag(name: string): Observable<Tag> {
     return this.http.post<Tag>(this.apiUrl, { name }).pipe(
       catchError(error => {
-        if (error.status === 409) {
-          // Tag already exists, try to find it
-          return this.getTags(true).pipe(
-            map(tags => tags.find(t => t.name.toLowerCase() === name.toLowerCase())),
-            map(tag => {
-              if (!tag) throw error;
-              return tag;
-            })
-          );
-        }
+        console.error('Error creating tag:', error);
         throw error;
       })
     );
