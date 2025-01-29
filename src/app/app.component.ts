@@ -12,7 +12,7 @@ import { NavMenuComponent } from './core/components/nav-menu/nav-menu.component'
     NavMenuComponent
   ],
   template: `
-    <div class="app-container">
+    <div class="app-container mat-app-background mat-typography" [class.dark-theme]="true">
       <app-nav-menu></app-nav-menu>
       <main class="main-content">
         <router-outlet></router-outlet>
@@ -29,24 +29,32 @@ import { NavMenuComponent } from './core/components/nav-menu/nav-menu.component'
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-      background-color: #fafafa;
+      background-color: #1a1a1a;
     }
 
     .main-content {
       flex: 1;
-      padding: 84px 20px 20px;
+      padding: 84px 20px 20px; /* Increased top padding to account for navbar */
+      background-color: #1a1a1a;
       max-width: 1200px;
       width: 100%;
       margin: 0 auto;
       box-sizing: border-box;
-      position: relative;
     }
 
-    @media (max-width: 768px) {
+    .dark-theme {
+      color: white;
+      background-color: #1a1a1a;
+    }
+
+    /* Adjust padding for mobile screens */
+    @media (max-width: 599px) {
       .main-content {
-        padding: 76px 16px 16px;
+        padding-top: 76px; /* Adjust for smaller navbar on mobile */
       }
     }
   `]
 })
-export class AppComponent {}
+export class AppComponent {
+  title = 'frontend';
+}

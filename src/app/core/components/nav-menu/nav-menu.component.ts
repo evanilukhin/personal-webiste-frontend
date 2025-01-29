@@ -26,16 +26,17 @@ import { AuthService } from '../../services/auth.service';
     MatDividerModule
   ],
   template: `
-    <mat-toolbar color="primary" class="nav-toolbar">
+    <mat-toolbar class="nav-toolbar">
       <button 
         mat-icon-button 
-        (click)="mobileMenu.toggle()" 
-        class="mobile-menu-button"
-        aria-label="Toggle navigation menu">
+        (click)="mobileMenu.toggle()"
+        class="mobile-menu-button">
         <mat-icon>menu</mat-icon>
       </button>
 
       <a routerLink="/" class="brand">Ivan Iliukhin</a>
+
+      <div class="spacer"></div>
 
       <nav class="desktop-nav">
         <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
@@ -59,7 +60,7 @@ import { AuthService } from '../../services/auth.service';
           <mat-icon>account_circle</mat-icon>
           <span class="user-email">{{ (authService.currentUser$ | async)?.email }}</span>
         </button>
-        <mat-menu #userMenu="matMenu">
+        <mat-menu #userMenu="matMenu" class="user-menu">
           <ng-container *ngIf="authService.isAdmin$ | async">
             <a mat-menu-item routerLink="/articles/new">
               <mat-icon>post_add</mat-icon>
@@ -68,7 +69,7 @@ import { AuthService } from '../../services/auth.service';
             <mat-divider></mat-divider>
           </ng-container>
           <button mat-menu-item (click)="logout()">
-            <mat-icon>logout</mat-icon>
+            <mat-icon>exit_to_app</mat-icon>
             <span>Logout</span>
           </button>
         </mat-menu>
@@ -136,20 +137,25 @@ import { AuthService } from '../../services/auth.service';
       left: 0;
       right: 0;
       z-index: 1000;
+      background-color: #1e1e1e;
+      color: rgba(255, 255, 255, 0.95);
       height: 64px;
       padding: 0 16px;
       display: flex;
       align-items: center;
       gap: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
     .brand {
       text-decoration: none;
-      color: white;
+      color: #fff;
       font-size: 20px;
-      font-weight: 500;
+      font-weight: 600;
       margin-right: 24px;
       white-space: nowrap;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     }
 
     .desktop-nav {
@@ -160,9 +166,17 @@ import { AuthService } from '../../services/auth.service';
       a {
         height: 36px;
         padding: 0 16px;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+        
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+          color: #fff;
+        }
         
         mat-icon {
           margin-right: 4px;
+          opacity: 0.9;
         }
         
         span {
@@ -176,14 +190,29 @@ import { AuthService } from '../../services/auth.service';
     }
 
     .active {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: rgba(255, 255, 255, 0.15) !important;
+      color: #fff !important;
+      
+      mat-icon {
+        opacity: 1 !important;
+      }
     }
 
     .user-menu-button {
       height: 36px;
+      color: #fff;
+      font-weight: 500;
+      padding: 0 12px;
+      border-radius: 4px;
+      background-color: rgba(255, 255, 255, 0.1);
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
       
       mat-icon {
-        margin-right: 4px;
+        margin-right: 8px;
+        color: #fff;
       }
       
       .user-email {
@@ -193,19 +222,38 @@ import { AuthService } from '../../services/auth.service';
         white-space: nowrap;
         display: inline-block;
         vertical-align: middle;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.25px;
+        color: #fff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
       }
     }
 
     .login-button {
       height: 36px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+      
+      &:hover {
+        color: #fff;
+        background-color: rgba(255, 255, 255, 0.1);
+      }
       
       mat-icon {
         margin-right: 4px;
+        opacity: 0.9;
       }
     }
 
     .mobile-menu-button {
       display: none;
+      color: rgba(255, 255, 255, 0.9);
+      
+      &:hover {
+        color: #fff;
+        background-color: rgba(255, 255, 255, 0.1);
+      }
     }
 
     .mobile-menu-container {
@@ -214,6 +262,48 @@ import { AuthService } from '../../services/auth.service';
 
     .mobile-menu {
       width: 280px;
+      background-color: #1e1e1e;
+      
+      .mat-nav-list {
+        padding-top: 8px;
+        
+        a {
+          color: rgba(255, 255, 255, 0.9);
+          font-weight: 500;
+          
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+          }
+          
+          mat-icon {
+            opacity: 0.9;
+          }
+        }
+      }
+    }
+
+    ::ng-deep .user-menu {
+      background-color: #1e1e1e;
+      
+      .mat-mdc-menu-content {
+        padding: 8px 0;
+      }
+      
+      .mat-mdc-menu-item {
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+        
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+          color: #fff;
+        }
+        
+        mat-icon {
+          color: rgba(255, 255, 255, 0.9);
+          margin-right: 8px;
+        }
+      }
     }
 
     @media (max-width: 768px) {
