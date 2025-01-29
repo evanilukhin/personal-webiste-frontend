@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,6 +19,7 @@ import { Article } from '../../../../core/models/article.model';
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -26,134 +27,13 @@ import { Article } from '../../../../core/models/article.model';
     MatProgressSpinnerModule,
     MarkdownModule
   ],
-  template: `
-    <div class="article-container">
-      <!-- Loading State -->
-      <div class="loading-spinner" *ngIf="loading">
-        <mat-spinner diameter="40"></mat-spinner>
-      </div>
-
-      <!-- Article Content -->
-      <mat-card *ngIf="!loading && article" class="article-card">
-        <!-- Cover Image -->
-        <img *ngIf="article.cover_image"
-             [src]="article.cover_image"
-             [alt]="article.title"
-             class="cover-image">
-
-        <mat-card-header>
-          <mat-card-title>{{ article.title }}</mat-card-title>
-          <mat-card-subtitle>
-            {{ article.created_at | date }}
-            · {{ article.reading_time }} min read
-          </mat-card-subtitle>
-        </mat-card-header>
-
-        <mat-card-content>
-          <!-- Tags -->
-          <div class="tags-container">
-            <mat-chip-listbox>
-              <mat-chip *ngFor="let tag of article.tags">{{ tag.name }}</mat-chip>
-            </mat-chip-listbox>
-          </div>
-
-          <!-- Summary -->
-          <p class="summary" *ngIf="article.summary">{{ article.summary }}</p>
-
-          <!-- Content -->
-          <div class="article-content">
-            <markdown [data]="article.content"></markdown>
-          </div>
-        </mat-card-content>
-
-        <!-- Actions -->
-        <mat-card-actions *ngIf="isAdmin$ | async">
-          <button mat-button color="primary" (click)="editArticle()">
-            <mat-icon>edit</mat-icon>
-            Edit
-          </button>
-          <button mat-button color="warn" (click)="deleteArticle()">
-            <mat-icon>delete</mat-icon>
-            Delete
-          </button>
-        </mat-card-actions>
-      </mat-card>
-
-      <!-- Error State -->
-      <div class="error-message" *ngIf="!loading && !article">
-        <p>Article not found</p>
-        <button mat-button color="primary" (click)="goBack()">
-          <mat-icon>arrow_back</mat-icon>
-          Back to Articles
-        </button>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .article-container {
-      padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .loading-spinner {
-      display: flex;
-      justify-content: center;
-      padding: 40px;
-    }
-
-    .article-card {
-      margin-bottom: 20px;
-    }
-
-    .cover-image {
-      width: 100%;
-      height: 400px;
-      object-fit: cover;
-      border-radius: 4px 4px 0 0;
-    }
-
-    .tags-container {
-      margin: 16px 0;
-    }
-
-    .summary {
-      font-size: 1.1em;
-      line-height: 1.6;
-      color: rgba(0, 0, 0, 0.7);
-      margin: 16px 0;
-      padding: 16px;
-      background: rgba(0, 0, 0, 0.03);
-      border-radius: 4px;
-    }
-
-    .article-content {
-      margin-top: 24px;
-      line-height: 1.7;
-    }
-
-    .error-message {
-      text-align: center;
-      padding: 40px;
-      color: rgba(0, 0, 0, 0.54);
-    }
-
-    mat-card-actions {
-      display: flex;
-      gap: 8px;
-      padding: 16px;
-    }
-
-    @media (max-width: 768px) {
-      .cover-image {
-        height: 200px;
-      }
-    }
-  `]
+  templateUrl: './article-detail.component.html',
+  styleUrls: ['./article-detail.component.scss']
 })
 export class ArticleDetailComponent implements OnInit {
   article: Article | null = null;
   loading = true;
+  error: string | null = null;
   isAdmin$: Observable<boolean>;
 
   constructor(
@@ -173,13 +53,15 @@ export class ArticleDetailComponent implements OnInit {
 
   loadArticle(id: number): void {
     this.loading = true;
+    this.error = null;
     this.articleService.getArticle(id).subscribe({
       next: (article) => {
         this.article = article;
         this.loading = false;
       },
-      error: () => {
+      error: (err) => {
         this.loading = false;
+        this.error = 'Failed to load article';
         this.snackBar.open('Failed to load article', 'Close', { duration: 5000 });
       }
     });

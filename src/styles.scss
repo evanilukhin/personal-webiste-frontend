@@ -231,6 +231,29 @@ pre {
   }
 }
 
+// Markdown content styles
+markdown {
+  color: rgba(255, 255, 255, 0.87) !important;
+  
+  ::ng-deep {
+    * {
+      color: rgba(255, 255, 255, 0.87) !important;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      color: rgba(255, 255, 255, 0.95) !important;
+    }
+    
+    a {
+      color: #b4b4ff !important;
+    }
+    
+    code {
+      color: #e0e0e0 !important;
+    }
+  }
+}
+
 // Utility classes
 .full-width {
   width: 100%;

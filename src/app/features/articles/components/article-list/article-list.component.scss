@@ -100,12 +100,16 @@
 
       .summary {
         margin-bottom: 16px;
-        color: var(--text-primary-color);
+        color: rgba(255, 255, 255, 0.87);
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        line-height: 1.6;
+        line-height: 1.8;
+        font-size: 0.95rem;
+        letter-spacing: 0.3px;
+        text-align: justify;
+        padding: 4px 0;
       }
 
       .tags {
@@ -115,17 +119,19 @@
         margin-top: auto;
 
         .tag {
-          background-color: var(--primary-darker-color);
-          color: var(--text-primary-color);
-          padding: 4px 12px;
-          border-radius: 16px;
-          font-size: 0.75rem;
+          background-color: rgba(63, 81, 181, 0.15);
+          color: #b4b4ff;
+          padding: 6px 14px;
+          border-radius: 20px;
+          font-size: 0.8rem;
           font-weight: 500;
-          letter-spacing: 0.4px;
-          transition: background-color 0.2s ease;
+          letter-spacing: 0.5px;
+          transition: all 0.2s ease;
+          backdrop-filter: blur(8px);
 
           &:hover {
-            background-color: var(--primary-color);
+            background-color: rgba(63, 81, 181, 0.25);
+            transform: translateY(-1px);
           }
         }
       }
