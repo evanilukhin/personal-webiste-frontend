@@ -39,17 +39,13 @@ import { AuthService } from '../../services/auth.service';
       <div class="spacer"></div>
 
       <nav class="desktop-nav">
-        <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-          <mat-icon>home</mat-icon>
-          <span>Home</span>
+        <a mat-button routerLink="/articles" routerLinkActive="active">
+          <mat-icon>article</mat-icon>
+          <span>Articles</span>
         </a>
         <a mat-button routerLink="/about" routerLinkActive="active">
           <mat-icon>person</mat-icon>
           <span>About</span>
-        </a>
-        <a mat-button routerLink="/articles" routerLinkActive="active">
-          <mat-icon>article</mat-icon>
-          <span>Articles</span>
         </a>
       </nav>
 
@@ -86,10 +82,6 @@ import { AuthService } from '../../services/auth.service';
     <mat-sidenav-container class="mobile-menu-container">
       <mat-sidenav #mobileMenu="matSidenav" mode="over" class="mobile-menu">
         <mat-nav-list>
-          <a mat-list-item routerLink="/" (click)="mobileMenu.close()">
-            <mat-icon matListItemIcon>home</mat-icon>
-            <span matListItemTitle>Home</span>
-          </a>
           <a mat-list-item routerLink="/about" (click)="mobileMenu.close()">
             <mat-icon matListItemIcon>person</mat-icon>
             <span matListItemTitle>About</span>
